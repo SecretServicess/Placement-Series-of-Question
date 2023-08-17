@@ -1,0 +1,64 @@
+# Intuition
+
+The problem requires finding the distance of each cell to the nearest 0 cell. 
+This involves determining the distances by traversing the matrix and applying a Breadth-First Search (BFS) approach to explore the neighboring cells.
+
+
+# Approach
+1. Initialize a queue for BFS traversal and a result matrix with -1 (indicating unvisited cells).
+2. Iterate through the matrix and enqueue the coordinates of 0 cells into the queue. Mark these cells as visited in the result matrix and set their distance to 0.
+3. Define the possible directions for movement (up, down, left, right).
+4. While the queue is not empty, dequeue a cell and explore its neighboring cells.
+5. If a neighboring cell is within bounds and unvisited, update its distance to the current cell's distance + 1. Enqueue the neighboring cell and mark it as visited.
+6. Return the result matrix with the updated distances.
+
+
+# Complexity
+- Time complexity:
+O(m⋅n), where m is the number of rows and n is the number of columns in the matrix. Each cell is visited and processed once.
+
+- Space complexity:
+O(m⋅n), for the result matrix and the queue. In the worst case, all cells could be enqueued, leading to the same space complexity as the input matrix.
+
+
+CODE:-
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        int rows = mat.size();
+        int cols = mat[0].size();
+        vector<vector<int>> result(rows, vector<int>(cols, INT_MAX));
+        queue<pair<int, int>> q;
+
+        // Initialize the result matrix with distances for cells with value 0
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (mat[i][j] == 0) {
+                    result[i][j] = 0;
+                    q.push({i, j});
+                }
+            }
+        }
+
+        vector<pair<int, int>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+        while (!q.empty()) {
+            pair<int, int> curr = q.front();
+            q.pop();
+
+            for (const auto& dir : directions) {
+                int newRow = curr.first + dir.first;
+                int newCol = curr.second + dir.second;
+
+                if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < cols) {
+                    if (result[newRow][newCol] > result[curr.first][curr.second] + 1) {
+                        result[newRow][newCol] = result[curr.first][curr.second] + 1;
+                        q.push({newRow, newCol});
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+};
