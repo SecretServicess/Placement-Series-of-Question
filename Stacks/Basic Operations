@@ -1,0 +1,48 @@
+#include <iostream>
+
+class stack {
+    int top;
+    int *nums;
+    int size;
+
+public:
+    stack(int size) {
+        top = -1;
+        this->size = size;
+        nums = new int[size];
+    }
+
+    void push(int num) {
+        if (top < size - 1) {  // Check if the stack is not full
+            top++;
+            nums[top] = num;
+        }
+    }
+
+    void pop() {
+        if (top >= 0) {  // Check if the stack is not empty
+            top--;
+        }
+    }
+
+    int peek() {
+        if (top >= 0 && top < size) {
+            return nums[top];
+        }
+        // Handle error or return a default value
+        return -1;
+    }
+
+    bool isEmpty() {
+        return top == -1;
+    }
+};
+
+int main() {
+    stack s(10); // Create a stack with a size of 10
+    s.push(10);
+    std::cout << "Top element: " << s.peek() << std::endl;
+    s.pop();
+    std::cout << "Is the stack empty? " << (s.isEmpty() ? "Yes" : "No") << std::endl;
+    return 0;
+}
